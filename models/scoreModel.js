@@ -5,7 +5,7 @@ const scoreSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    nickname:{ //닉네임
+    username:{ //닉네임
         type: String,
         required: true,
     },
@@ -23,7 +23,7 @@ const scoreSchema = new mongoose.Schema({
     {timestamps: true} //
 );
 
-scoreSchema.index({userId:1,nickname:1},{unique:true}); //id-nickname 묶어서 처리
+scoreSchema.index({userId:1,username:1},{unique:true}); //id-nickname 묶어서 처리
 
 const Score = mongoose.model("Score",scoreSchema); //Score 모델 생성
 module.exports = Score;
