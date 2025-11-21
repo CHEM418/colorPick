@@ -22,7 +22,7 @@ app.use(methodoverride("_method"));
 app.use(express.json());  
 app.use(express.urlencoded({extended: true}));
 
- //에러 핸들러 미들웨어 등록
+ //에러 핸들러 미들웨어 등록(아직!!)
 //app.use(errorhandler);
 
 //
