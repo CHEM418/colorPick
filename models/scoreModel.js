@@ -9,7 +9,7 @@ const scoreSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    score:{ //최고 점수
+    highscore:{ //최고 점수
         type: Number,
         required: true,
     },
