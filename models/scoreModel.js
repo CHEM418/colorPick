@@ -25,5 +25,5 @@ const scoreSchema = new mongoose.Schema({
 
 scoreSchema.index({userId:1,username:1},{unique:true}); //id-nickname 묶어서 처리
 
-const Score = mongoose.model("Score",scoreSchema); //Score 모델 생성
+const Score = mongoose.model("Score",scoreSchema);
 module.exports = Score;
