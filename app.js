@@ -1,6 +1,6 @@
 const express = require("express");
 const dbConnect = require("./config/dbConnect");
-const errorhandler = require("./errorhandler");
+//const errorhandler = require("./errorhandler");
 const methodoverride = require("method-override");
 const app = express();
 const port = 3000;
