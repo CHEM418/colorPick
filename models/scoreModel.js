@@ -13,9 +13,7 @@ const scoreSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-},
-    {
-        time: { //걸린 시간
+    time: { //걸린 시간
             type: Number,
             required: true,
         },
@@ -23,7 +21,7 @@ const scoreSchema = new mongoose.Schema({
     {timestamps: true} //
 );
 
-scoreSchema.index({userId:1,username:1},{unique:true}); //id-nickname 묶어서 처리
+scoreSchema.createIndex({userID:1,username:1},{unique:true}); //아이디-닉네임 묶어서 유니크
 
 const Score = mongoose.model("Score",scoreSchema);
 module.exports = Score;
