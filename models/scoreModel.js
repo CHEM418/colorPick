@@ -14,10 +14,11 @@ const scoreSchema = new mongoose.Schema({
             required: true,
         },
     },
-    {timestamps: true} //
+    {timestamps: true}
 );
 
 scoreSchema.index({userId:1,username:1},{unique:true});
 
 const Score = mongoose.model("Score",scoreSchema);
 module.exports = Score;
+
