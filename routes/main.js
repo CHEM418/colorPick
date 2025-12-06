@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-
 router.get(['/', '/home', '/index'], (req, res)=> {
     res.render('index', {pageName: 'index'});
 });
-
 
 router.get(['/games/stage', '/stage'], async(req, res,next)=>{
     try{
@@ -39,3 +37,4 @@ router.get('/ranking', (req, res) => {
 });
 
 module.exports = router;
+
