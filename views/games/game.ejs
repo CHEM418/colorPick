@@ -314,8 +314,9 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(
-                        time: finalTime,
+                    body: JSON.stringify({
+                        //stageId: CURRENT_STAGE_ID,
+                        time: Number(finalTime),
                         userId: currentUser?.id||null,
                         username: currentUser?.username || '',
                     })
