@@ -7,12 +7,19 @@ router.get(['/', '/home', '/index'], (req, res)=> {
 });
 
 
-router.get(['/games/stage', '/stage'], (req, res,next)=>{
+router.get(['/games/stage', '/stage'], async(req, res,next)=>{
     try{
-        // **DB에서 기록을 불러오는 로직 구현 필요해요!** //
-        //여기
-        
-        res.render('games/stage', {pageName: 'stage'});
+        const currentUser = req.user;
+        let stageRecords = []; //각 스테이지기록
+
+        if(currentUser){ //db 불러오기
+            stageRecords = await Score.find({
+                userId: currentUser.id,
+                username: currentUser.username
+            });
+        }
+        //기록 전달 ** ejs에서 쓰실 땐 stageRecods 배열 쓰시면 돼요! **
+        res.render('games/stage', {pageName: 'stage',stageRecords:stageRecords});
 
     } catch(err){
         next(err); //에러핸들러로 처리
