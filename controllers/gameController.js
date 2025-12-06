@@ -1,5 +1,3 @@
-//오류 => 어싱크 핸들러로 오류 던지고 errorhandler.js에서 처리
-
 const asyncHandler = require("express-async-handler");
 const Score = require("../models/scoreModel");
 
@@ -44,3 +42,4 @@ const gameResult = asyncHandler(async(req,res)=>{
 });
 
 module.exports={gameResult};
+//오류 => 어싱크 핸들러로 오류 던지고 errorhandler.js에서 처리
