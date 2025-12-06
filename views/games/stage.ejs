@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Pick! - 스테이지 선택</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="/index" class="header-logo">COLOR PICK!</a>
+        </header>
+
+        <main class="main">
+            <h2 class="stage-heading">스테이지를 선택해 주세요</h2>
+            
+            <div class="stage-selection">
+                <a href="/game1" class="stage-button">1</a>
+
+                <a href="/game2" class="stage-button">2</a>
+
+                <a href="/game3" class="stage-button">3</a>
+            </div>
+
+            <div class="all-clear-title">
+                <h3 class= "all-clear-box">🎉 모든 스테이지 클리어!</h3>
+                <p class="all-clear-desc">
+                    최종 합산 기록: <span id="total-time-display" class="final-time-text">0.00초</span>
+                </p>
+                <a href="/ranking" class="btn-ranking">
+                    🏆 랭킹 보러 가기
+                </a>
+            </div>
+        </main>
+    </div>
+    
+
+    <!-- 쿠키가 세 개 존재할 때만 버튼 노출(미구현)-->
+    <script>
+    function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    // --- 메인 로직 ---
+    function checkAllClear() {
+        let totalTime = 0;
+        let clearedCount = 0;
+
+        // 1, 2, 3번 스테이지 쿠키를 각각 확인합니다.
+        for (let i = 1; i <= 3; i++) {
+            const stageId = i.toString();
+            
+            //핵심: record_1, record_2, record_3 이름을 구체적으로 찾습니다.
+            const recordTime = getCookie(`record_${stageId}`);
+            const recordElement = document.getElementById(`record_${stageId}`);
+
+            if (recordTime) {
+                const time = parseFloat(recordTime);
+                recordElement.textContent = `최고 기록: ${time.toFixed(2)}초`;
+                recordElement.style.color = "#059669"; //
+                recordElement.style.fontWeight = "bold";
+                
+                totalTime += time;
+                clearedCount++;
+            } else {
+                recordElement.textContent = '도전 중...';
+            }
+        }
+
+        // 3개의 쿠키가 모두 존재할 때만 버튼 표시
+        if (clearedCount === 3) {
+            const section = document.getElementById('all-clear-section');
+            const totalDisplay = document.getElementById('total-time-display');
+            
+            totalDisplay.textContent = totalTime.toFixed(2) + "초";
+            section.classList.remove('hidden'); // 숨김 해제
+        }
+    }
+
+    window.onload = checkAllClear;
+    </script>
+</body>
+</html>
