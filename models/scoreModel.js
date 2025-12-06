@@ -9,11 +9,7 @@ const scoreSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    highscore:{ //최고 점수
-        type: Number,
-        required: true,
-    },
-    time: { //걸린 시간
+    time: { //걸린 시간(=최고 기록)
             type: Number,
             required: true,
         },
@@ -21,7 +17,7 @@ const scoreSchema = new mongoose.Schema({
     {timestamps: true} //
 );
 
-scoreSchema.createIndex({userID:1,username:1},{unique:true}); //아이디-닉네임 묶어서 유니크
+scoreSchema.index({userId:1,username:1},{unique:true});
 
 const Score = mongoose.model("Score",scoreSchema);
 module.exports = Score;
