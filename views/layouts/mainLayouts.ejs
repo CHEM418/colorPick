@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title><%= title %></title> 
+    <meta name="description" content="Color Pick Game Application.">
+    
+
+    <!-- 3. 개별 페이지 CSS가 필요할 때 삽입될 위치 -->
+    <%- style %>
+</head>
+<body>
+    
+    <div class="container"> 
+        <!-- 상단 헤더 영역 -->
+        <header class="header">
+            <% if (locals.pageName && locals.pageName !== 'index') { %>
+                <a href="/" class="header-logo">
+                    <img src="public\img\colorpick_logo.png" alt="컬러픽 로고" class="colorpick_logo" height="40" width="100">
+                </a>
+            <% } %>
+
+            <!-- 2. 상단 메뉴 -->
+            <nav class="header-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </nav>
+
+            <!-- 3. 관리자 로그인 버튼 -->
+            <div class="header-button">
+                <a href="#">관리자 로그인</a>
+            </div>
+        </header>
+        
+        <!-- 메인 콘텐츠: 개별 페이지의 내용이 삽입될 위치 -->    
+        <main class="main">
+            <%- body %>
+        </main>
+        
+        <!-- 푸터 (필요 시 추가) -->
+        <!-- <%- include('../partials/footer') %> -->
+    </div>  
+
+    <!-- 개별 페이지 JS가 필요할 때 삽입될 위치 -->
+    <%- script %>
+</body>
+</html>
