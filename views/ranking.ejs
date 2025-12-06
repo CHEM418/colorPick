@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랭킹 공유</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons (SNS 아이콘 사용) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f3f4f6; }
+        .ranking-container { max-width: 900px; margin: 40px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header-section { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e5e7eb; padding-bottom: 16px; margin-bottom: 24px; }
+        .rank-item { display: grid; grid-template-columns: 50px 1fr 100px 100px; gap: 10px; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+        .rank-header { font-weight: 700; color: #4b5563; }
+        .rank-number { font-weight: 900; color: #1f2937; }
+        .rank-time { font-weight: 700; color: #ef4444; }
+        .login-modal { background-color: rgba(0, 0, 0, 0.6); }
+        .login-card { max-width: 400px; }
+        .btn-primary { background-color: #3b82f6; color: white; transition: background-color 0.15s; }
+        .btn-primary:hover { background-color: #2563eb; }
+    </style>
+</head>
+<body>
+
+<div class="ranking-container">
+    
+    <!-- 헤더 및 로그인 상태 -->
+    <div class="header-section">
+        <h1 class="text-3xl font-extrabold text-gray-800">통합 랭킹 보드</h1>
+        
+        <!-- 로그인/로그아웃 버튼 -->
+        <div id="auth-controls">
+            <button id="login-btn" class="btn-primary py-2 px-4 rounded-lg font-bold">로그인</button>
+            <!-- 로그인 시 표시될 요소 -->
+            <div id="user-info" class="hidden flex items-center gap-3">
+                <span id="username-display" class="font-bold text-lg text-gray-700"></span>
+                <button id="logout-btn" class="text-sm text-gray-500 hover:text-red-500">로그아웃</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 랭킹 테이블 -->
+    <div class="ranking-table">
+        
+        <!-- 테이블 헤더 -->
+        <div class="rank-item rank-header">
+            <div>순위</div>
+            <div>유저 ID / 이름</div>
+            <div>최고 기록</div>
+            <div>공유</div>
+        </div>
+        
+        <!-- 랭킹 데이터 (지금은 임시 데이터)-->
+        <div id="ranking-list">
+            <div class="rank-item">
+                <div class="rank-number text-xl">1</div>
+                <div>
+                    <p class="font-bold text-gray-800">User_Alpha</p>
+                    <p class="text-xs text-gray-500">ID: alpha123</p>
+                </div>
+                <div class="rank-time text-lg">45.21초</div>
+                <div><button class="share-btn text-gray-500 hover:text-gray-700" data-record="45.21">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button></div>
+            </div>
+            
+            <div class="rank-item">
+                <div class="rank-number text-lg">2</div>
+                <div>
+                    <p class="font-bold text-gray-700">GameMaster</p>
+                    <p class="text-xs text-gray-500">ID: master</p>
+                </div>
+                <div class="rank-time text-lg">51.98초</div>
+                <div><button class="share-btn text-gray-500 hover:text-gray-700" data-record="51.98">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button></div>
+            </div>
+            
+            <div class="rank-item">
+                <div class="rank-number text-md">3</div>
+                <div>
+                    <p class="font-bold text-gray-600">BestPlayer</p>
+                    <p class="text-xs text-gray-500">ID: bp_01</p>
+                </div>
+                <div class="rank-time text-md">60.05초</div>
+                <div><button class="share-btn text-gray-500 hover:text-gray-700" data-record="60.05">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button></div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- SNS 공유 아이콘 표시 (목록 아래) -->
+    <div class="mt-8 pt-4 border-t border-gray-200 text-center">
+        <p class="text-gray-600 mb-3">SNS에 공유해 보세요!</p>
+        <div class="inline-flex gap-4">
+            <button class="share-icon text-blue-500 hover:text-blue-700" title="트위터 공유"><i data-lucide="twitter" class="w-6 h-6"></i></button>
+            <button class="share-icon text-green-500 hover:text-green-700" title="카카오톡 공유"><i data-lucide="message-square" class="w-6 h-6"></i></button>
+        </div>
+    </div>
+
+</div>
+
+<!-- 로그인 모달 -->
+<div id="login-modal" class="login-modal fixed inset-0 hidden justify-center items-center z-50">
+    <div class="login-card bg-white p-6 rounded-xl shadow-2xl">
+        <h2 class="text-2xl font-bold mb-4">로그인</h2>
+        <form id="login-form">
+            <label for="login-id" class="block text-sm font-medium text-gray-700 mb-1">ID</label>
+            <input type="text" id="login-id" name="id" class="border border-gray-300 p-2 w-full rounded-md mb-4" required>
+            
+            <label for="login-username" class="block text-sm font-medium text-gray-700 mb-1">Username (표시 이름)</label>
+            <input type="text" id="login-username" name="username" class="border border-gray-300 p-2 w-full rounded-md mb-6" required>
+            
+            <button type="submit" class="btn-primary w-full py-2 rounded-md font-bold">로그인</button>
+        </form>
+        <button id="close-modal-btn" class="mt-4 text-sm text-gray-500 hover:text-gray-700 w-full">닫기</button>
+    </div>
+</div>
+
+<script>
+    // 모든 Lucide 아이콘을 렌더링
+    lucide.createIcons();
+
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const loginModal = document.getElementById('login-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const loginForm = document.getElementById('login-form');
+    const userInfo = document.getElementById('user-info');
+    const usernameDisplay = document.getElementById('username-display');
+
+    // 임시 사용자 상태 변수
+    let currentUser = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : null;
+
+    // --- UI 상태 업데이트 ---
+    function updateAuthUI() {
+        if (currentUser) {
+            loginBtn.classList.add('hidden');
+            userInfo.classList.remove('hidden');
+            usernameDisplay.textContent = currentUser.username;
+        } else {
+            loginBtn.classList.remove('hidden');
+            userInfo.classList.add('hidden');
+        }
+    }
+
+    // --- 이벤트 핸들러 ---
+    
+    //로그인 버튼 클릭
+    loginBtn.addEventListener('click', () => {
+        loginModal.classList.remove('hidden');
+        loginModal.classList.add('flex');
+    });
+
+    //모달 닫기 버튼
+    closeModalBtn.addEventListener('click', () => {
+        loginModal.classList.add('hidden');
+        loginModal.classList.remove('flex');
+    });
+    
+    //모달 외부 클릭 시 닫기
+    loginModal.addEventListener('click', (e) => {
+        if (e.target === loginModal) {
+            closeModalBtn.click();
+        }
+    });
+
+    //로그인 폼 제출
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); //새로고침 방지
+        
+        const id = document.getElementById('login-id').value;
+        const username = document.getElementById('login-username').value;
+        
+        /// ***DB저장 코드***///
+        try{
+        currentUser = { id, username }; //현재 유저
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+
+        const recentGame =JSON.parse(localStorage.getItem('recentGame'))||[];//최근 게임 기록
+        if(recentGame.length>0){ 
+
+            let totalTime=0; //총합 시간 계산
+            for(const game of recentGame){
+                totalTime += parseFloat(game.time);
+            }
+                await fetch('/api/save-record',{ // 최근 게임 기록 전송
+                    method:'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        time: totalTime,
+                        userId: currentUser.id,
+                        username: currentUser.username
+                    })
+                });
+            
+        }
+        closeModalBtn.click(); // 모달 닫기
+        updateAuthUI(); // UI 업데이트
+    }catch(err){
+        console.error('로그인 오류:',err);
+        alert(err.message);
+    }});
+
+    //로그아웃
+    logoutBtn.addEventListener('click', () => {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        updateAuthUI();
+    });
+    
+    //단순 복사 공유 기능
+    document.querySelectorAll('.share-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const recordTime = e.currentTarget.dataset.record;
+            const message = `[Color Pick!] 제 통합 기록은 ${recordTime}초입니다! 당신의 기록은 몇 초인가요?`;
+            
+            // 클립보드 복사
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(message).then(() => {
+                    alert('기록 메시지가 클립보드에 복사되었습니다!');
+                }).catch(err => {
+                    console.error('클립보드 복사 실패:', err);
+                });
+            } else {
+            }
+        });
+    });
+
+    /*
+    //SNS공유 기능
+    const pageUrl = window.location.origin; // 현재 홈페이지 주소 (예: http://localhost:3000)
+    const pageTitle = "Color Pick! 색깔 맞추기 게임";
+    const hashTags = "ColorPick,미니게임,웹게임";
+
+    // 1. 트위터(X) 공유
+    document.getElementById('share-twitter').addEventListener('click', () => {
+        // 트위터는 URL 뒤에 쿼리스트링(?text=...)을 붙여서 새 창을 열면 됩니다.
+        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(pageTitle)}&url=${encodeURIComponent(pageUrl)}&hashtags=${hashTags}`;
+        window.open(url, '_blank', 'width=600,height=400');
+    });
+
+    // 2. 페이스북 공유
+    document.getElementById('share-facebook').addEventListener('click', () => {
+        const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}`;
+        window.open(url, '_blank', 'width=600,height=400');
+    });
+
+    // 3. 카카오톡 공유
+    document.getElementById('share-kakao').addEventListener('click', () => {
+        if (!window.Kakao || !Kakao.isInitialized()) {
+            alert('카카오톡 공유를 위해서는 JavaScript 키 설정이 필요합니다.\nKakao Developers에서 키를 발급받아 ranking.ejs 파일에 입력해주세요.');
+            return;
+        }
+
+        Kakao.Share.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: pageTitle,
+                description: '스테이지를 클리어하고 랭킹에 도전하세요!',
+                imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png', // 썸네일 이미지 주소
+                link: {
+                    mobileWebUrl: pageUrl,
+                    webUrl: pageUrl,
+                },
+            },
+            buttons: [
+                {
+                    title: '게임하러 가기',
+                    link: {
+                        mobileWebUrl: pageUrl,
+                        webUrl: pageUrl,
+                    },
+                },
+            ],
+        });
+    });
+    */
+
+    // 초기화
+    updateAuthUI();
+
+    // 여기서 DB에서 불러와 랭킹페이지에 채웁니다
+    function loadRankingData() {
+        fetch('/api/ranking-data')
+            .then(res => res.json())
+            .then(data => {
+                // data를 순회하며 rankinglist에 HTML 템플릿 추가
+            });
+    }
+    loadRankingData();
+    
+</script>
+
+</body>
+</html>
