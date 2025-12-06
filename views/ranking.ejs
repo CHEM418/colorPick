@@ -181,6 +181,7 @@
         currentUser = { id, username }; //현재 유저
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
+
         const recentGame =JSON.parse(localStorage.getItem('recentGame'))||[];//최근 게임 기록
         if(recentGame.length>0){ 
 
@@ -192,7 +193,7 @@
                     method:'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        time: totalTime,
+                        time: Number(totalTime),
                         userId: currentUser.id,
                         username: currentUser.username
                     })
