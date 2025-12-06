@@ -26,7 +26,6 @@ const gameResult = asyncHandler(async(req,res)=>{
         });
         newRecord=true;
         exists=newUser;
-
     }
     // 게임 결과 랭킹(최고 점수들 기준)
     const playerRank = await Score.countDocuments({time:{$lt:time}})+1;
@@ -38,8 +37,8 @@ const gameResult = asyncHandler(async(req,res)=>{
         newRecord,
         playerRank
     });
-    
 });
 
 module.exports={gameResult};
 //오류 => 어싱크 핸들러로 오류 던지고 errorhandler.js에서 처리
+
