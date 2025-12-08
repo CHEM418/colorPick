@@ -49,7 +49,8 @@ cron.schedule('0 0 * * *',async()=>{ //매일 자정에 삭제
             console.log(`모든 데이터가 초기화 되었습니다.`);
         } catch(err){ 
             console.log(`모든 데이터 초기화를 실패했습니다.`,err);
-        },{
+        }
+    },{
         timezone: "Asia/Seoul"
 });
 
@@ -57,4 +58,3 @@ cron.schedule('0 0 * * *',async()=>{ //매일 자정에 삭제
 app.listen(port, ()=>{
     console.log(`App listening on port ${port}`);
 });
-
