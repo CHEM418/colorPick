@@ -8,19 +8,19 @@ router.get(['/', '/home', '/index'], (req, res)=> {
 router.get(['/games/stage', '/stage'], async(req, res,next)=>{
     try{
         const currentUser = req.user;
-        let stageRecords = []; //각 스테이지기록
+        let stageTime = []; //각 스테이지기록 배열 저장
 
-        if(currentUser){ //db 불러오기
-            stageRecords = await Score.find({
+        if(currentUser){//db 불러오기
+            stageTime = await Score.find({//넣기
                 userId: currentUser.id,
                 username: currentUser.username
             });
         }
-        //기록 전달 ** ejs에서 쓰실 땐 stageRecods 배열 쓰시면 돼요! **
-        res.render('games/stage', {pageName: 'stage',stageRecords:stageRecords});
+        //기록 전달: ejs에서 쓰실 땐 stageTime 배열 쓰시면 돼요!
+        res.render('games/stage', {pageName: 'stage',stageTime:stageTime});
 
     } catch(err){
-        next(err); //에러핸들러로 처리
+     next(err); // 에러핸들러로 처리
     }
 });
 
@@ -37,4 +37,5 @@ router.get('/ranking', (req, res) => {
 });
 
 module.exports = router;
+
 
