@@ -19,9 +19,10 @@ const scoreSchema = new mongoose.Schema({
 },
     {timestamps: true});
 
-scoreSchema.index({userId:1,username:1,stageId:1},{unique:true});
+scoreSchema.index({userId:1,username:1,stageId:1},{unique:true});//닉넴,아이디,스테이지별로 기록
 
 const Score = mongoose.model("Score",scoreSchema);
 module.exports = Score;
+
 
 
