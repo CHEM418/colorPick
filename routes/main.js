@@ -1,26 +1,28 @@
 const express = require("express");
 const router = express.Router();
 
+
 router.get(['/', '/home', '/index'], (req, res)=> {
     res.render('index', {pageName: 'index'});
 });
 
+
 router.get(['/games/stage', '/stage'], async(req, res,next)=>{
     try{
-        const currentUser = req.user;
-        let stageTime = []; //각 스테이지기록 배열 저장
+        const currentUser = req.user; //지금 유저 정보
+        let stageTime = []; //각 스테이지 기록 배열에 저장
 
-        if(currentUser){//db 불러오기
-            stageTime = await Score.find({//넣기
+        if(currentUser){
+            stageTime = await Score.find({  //지금 유저 모든 stage 기록 찾아오기
                 userId: currentUser.id,
                 username: currentUser.username
-            });
+            }).sort({stageId:1}); //stage 순서로 정렬하기
         }
-        //기록 전달: ejs에서 쓰실 땐 stageTime 배열 쓰시면 돼요!
+        // ejs에서 쓰실 땐 stageTime 배열 쓰시면 돼요! -
         res.render('games/stage', {pageName: 'stage',stageTime:stageTime});
 
     } catch(err){
-     next(err); // 에러핸들러로 처리
+        next(err); //에러핸들러로 처리
     }
 });
 
@@ -37,5 +39,3 @@ router.get('/ranking', (req, res) => {
 });
 
 module.exports = router;
-
-
