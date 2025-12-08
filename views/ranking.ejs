@@ -176,36 +176,42 @@
         const id = document.getElementById('login-id').value;
         const username = document.getElementById('login-username').value;
         
-        /// ***DB저장 코드***///
+        /// DB 저장 코드
         try{
-        currentUser = { id, username }; //현재 유저
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-
-        const recentGame =JSON.parse(localStorage.getItem('recentGame'))||[];//최근 게임 기록
-        if(recentGame.length>0){ 
-
-            let totalTime=0; //총합 시간 계산
-            for(const game of recentGame){
-                totalTime += parseFloat(game.time);
-            }
-                await fetch('/api/save-record',{ // 최근 게임 기록 전송
-                    method:'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        time: Number(totalTime),
-                        userId: currentUser.id,
-                        username: currentUser.username
-                    })
-                });
+            currentUser ={id,username};//임시 유저->id,username 변경
+            localStorage.setItem('currentUser', JSON.stringify(currentUser)); //로컬에 저장
             
-        }
+            const recentGame =JSON.parse(localStorage.getItem('recentGame'))||{};//최근 게임 기록 가져오기
+            let totalTime=0;
+            for(const stageId in recentGame){
+                totalTime += parseFloat(recentGame[stageId]);//총합
+            }
+
+            //서버 전송
+            const response = await fetch('/api/save-total-time',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({
+                    userId: currentUser.id,
+                    username: currentUser.username,
+                    time:Number(totalTime.toFixed(2)),
+                    stageId:0
+            })
+        });
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('랭킹 등록 성공:', result);
+                    localStorage.removeItem('recentGame'); //기록 삭제
+                } else{
+                console.log('랭킹 등록 실패',response.statusText);
+            }
         closeModalBtn.click(); // 모달 닫기
         updateAuthUI(); // UI 업데이트
     }catch(err){
         console.error('로그인 오류:',err);
         alert(err.message);
-    }});
+    }
+});
 
     //로그아웃
     logoutBtn.addEventListener('click', () => {
