@@ -13,12 +13,15 @@ const scoreSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-    },
-    {timestamps: true}
-);
+    stageId:{
+        type:Number,
+    }
+},
+    {timestamps: true});
 
-scoreSchema.index({userId:1,username:1},{unique:true});
+scoreSchema.index({userId:1,username:1,stageId:1},{unique:true});
 
 const Score = mongoose.model("Score",scoreSchema);
 module.exports = Score;
+
 
