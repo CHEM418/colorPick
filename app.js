@@ -46,14 +46,15 @@ cron.schedule('0 0 * * *',async()=>{ //매일 자정에 삭제
 
         try{
             await Score.deleteMany({});
-            console.log(`점수 데이터가 초기화 되었습니다.`);
+            console.log(`모든 데이터가 초기화 되었습니다.`);
         } catch(err){ 
-            console.log(`점수 데이터가 초기화에 실패했니다.`,err);
-        }
-
+            console.log(`모든 데이터 초기화를 실패했습니다.`,err);
+        },{
+        timezone: "Asia/Seoul"
 });
 
 //서버 대기
 app.listen(port, ()=>{
     console.log(`App listening on port ${port}`);
 });
+
