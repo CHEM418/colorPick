@@ -1,29 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const {gameResult,gameStageResult,getStage} = require('./controllers/gameController');
 
 
 router.get(['/', '/home', '/index'], (req, res)=> {
     res.render('index', {pageName: 'index'});
 });
 
-
-router.get(['/games/stage', '/stage'], async(req, res,next)=>{
-    try{
-        const currentUser = req.user; //지금 유저 정보
-        let stageTime = []; //각 스테이지 기록 배열 저장
-
-        if(currentUser){
-            stageTime = await Score.find({//모든 stage 기록 찾아오기
-                userId: currentUser.id,
-                username: currentUser.username
-            }).sort({stageId:1});
-        }
-        // @@@ ejs에서 stageTime배열 stageId 확인하시고 쓰시면 돼요! @@@
-        res.render('games/stage', {pageName: 'stage',stageTime:stageTime});
-    } catch(err){
-        next(err); //에러핸들러
-    }
-});
+router.get(['/games/stage', '/stage'],getStage);
 
     //**게임 기록 저장 코드 (POST)**//
 
@@ -36,5 +20,9 @@ router.get('/game:gameId', (req, res)=>{ /*게임 페이지 동적 라우팅*(�
 router.get('/ranking', (req, res) => {
     res.render('ranking', {pageName: 'ranking'});
 });
+
+//api 연결
+router.post('/api/save-record', gameStageResult); //개별 기록 저장(game.ejs)
+router.post('/api/save-total-time',gameResult); //총합 랭킹 저장(ranking.ejs)
 
 module.exports = router;
