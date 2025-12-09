@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Score = require("../models/scoreModel");
 
-// 각 스테이지 결과 가져오기 stage.ejs
+// 각 스테이지 결과 가져오기 (배열로 저장)
 const getStage = asyncHandler(async(req,res)=>{
         const currentUser = req.user; //지금 유저 정보
         let stageTime = []; //각 스테이지 기록 배열 저장
@@ -10,6 +10,7 @@ const getStage = asyncHandler(async(req,res)=>{
             stageTime = await Score.find({//모든 stage 기록 찾아오기
                 userId: currentUser.id,
                 username: currentUser.username
+                stageId:{$ne:0}
             }).sort({stageId:1});
         }
         // @@@ ejs에서 stageTime배열 stageId 확인하시고 쓰시면 돼요! @@@
