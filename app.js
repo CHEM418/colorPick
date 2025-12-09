@@ -6,8 +6,8 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const dbConnect = require("./config/dbConnect");
 const errorhandler = require("./errorhandler");
-const cron = require("node-cron");
-const Score = require('./models/scoreModel');
+const cron = require(`node-cron`);
+const Score = require('./models/Score');
 
 //app 서버 생성
 const app = express();
@@ -42,7 +42,7 @@ cron.schedule('0 0 * * *',async()=>{ //매일 자정에 삭제
             await Score.deleteMany({});
             console.log(`모든 데이터가 초기화 되었습니다.`);
         } catch(err){ 
-            console.log(`모든 데이터 초기화에에 실패했습니다.`,err);
+            console.log(`모든 데이터 초기화에 실패했습니다.`,err);
         }
     },{
         timezone: "Asia/Seoul"
@@ -52,4 +52,3 @@ cron.schedule('0 0 * * *',async()=>{ //매일 자정에 삭제
 app.listen(port, ()=>{
     console.log(`App listening on port ${port}`);
 });
-
