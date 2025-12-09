@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const scoreSchema = new mongoose.Schema({
+const ScoreSchema = new mongoose.Schema({
     userId:{ //아이디
         type: String,
         required: true,
@@ -21,6 +21,7 @@ const scoreSchema = new mongoose.Schema({
 
 scoreSchema.index({userId:1,username:1,stageId:1},{unique:true});//닉네임+id+스테이지 별로 기록
 
-const Score = mongoose.model("Score",scoreSchema);
+const Score = mongoose.model("Score",ScoreSchema);
 module.exports = Score;
+
 
