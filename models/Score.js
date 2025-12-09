@@ -13,7 +13,7 @@ const ScoreSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-    stageId:{ //*stageId 0번의 time은 최고 기록 저장 공간
+    stageId:{ // ***stageId별로 저장, stageId가 0인 time은 최고 기록 저장 공간
         type:Number,
     }
 },
@@ -21,8 +21,6 @@ const ScoreSchema = new mongoose.Schema({
 
 ScoreSchema.index({userId:1,username:1,stageId:1},{unique:true});//닉네임+id+스테이지 별로 기록
 
-const Score = mongoose.model("Score",ScoreSchema);
-module.exports = Score;
 
-
+module.exports = mongoose.model("Score",ScoreSchema);
 
