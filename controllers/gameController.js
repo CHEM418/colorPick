@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Score = require("../models/Score");
 
-// 각 스테이지 결과 가져오기 (배열로 저장)
+// 각 스테이지 결과 가져오기 (키-값 stageId-time)
 const getStage = asyncHandler(async(req,res)=>{
         const currentUser = req.user; //지금 유저 정보
         let stageTime = []; //각 스테이지 기록 배열 저장
@@ -13,8 +13,12 @@ const getStage = asyncHandler(async(req,res)=>{
                 stageId:{$ne:0}
             }).sort({stageId:1});
         }
-        // @@@ ejs에서 stageTime배열 stageId 확인하시고 쓰시면 돼요! @@@
-        res.render('games/stage', {pageName: 'stage',stageTime:stageTime});
+    
+        const stageMap=stageTime.reduce((accumulator,record)=>{//배열 키-값으로 만들기
+            accumulator[record.stageId]=record.time;
+            return accumulator;
+        },{});
+        res.render('games/stage', {pageName: 'stage',stageMap:stageMap});
 });
 
 
@@ -43,13 +47,13 @@ const gameResult = asyncHandler(async(req,res)=>{
     let exists=await Score.findOne({userId,username,stageId:0});//0번은 최고 기록
     var newRecord=false; //신기록 여부
 
-    if(exists){//기존 유저: 업데이트
+    if(exists){//기존 유저->업데이트
         if(time<exists.time){
             exists.time=time;
             await exists.save();
             newRecord=true;
         }
-    } else{ //신규 유저: 생성
+    } else{ //신규 유저->생성
         const newUser = await Score.create({
             userId,
             username,
@@ -73,4 +77,3 @@ const gameResult = asyncHandler(async(req,res)=>{
 
 module.exports={gameResult,gameStageResult,getStage};
 //오류 => 어싱크 핸들러로 오류 던지고 errorhandler.js에서 처리
-
