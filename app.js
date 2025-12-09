@@ -8,7 +8,6 @@ const dbConnect = require("./config/dbConnect");
 const errorhandler = require("./errorhandler");
 const cron = require("node-cron");
 const Score = require('./models/scoreModel');
-const {gameResult,gameStageResult} = require('./controllers/gameController');
 
 //app 서버 생성
 const app = express();
@@ -25,11 +24,6 @@ app.use(express.json()); //바디 파서
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public")); //정적 파일의 경로 알려줌
 app.use("/", require("./routes/main")); //main파일 내 라우터가 미들웨어를 처리하도록 함
-
-//결과 저장 api
-app.post('/api/save-record', gameStageResult);
-app.post('/api/save-total-time',gameResult);
-
 
 //ejs엔진 사용 설정
 app.set("view engine", "ejs"); //엔진 선택
