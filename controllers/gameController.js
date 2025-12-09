@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Score = require("../models/scoreModel");
+const Score = require("../models/Score");
 
 // 각 스테이지 결과 가져오기 (배열로 저장)
 const getStage = asyncHandler(async(req,res)=>{
@@ -73,3 +73,4 @@ const gameResult = asyncHandler(async(req,res)=>{
 
 module.exports={gameResult,gameStageResult,getStage};
 //오류 => 어싱크 핸들러로 오류 던지고 errorhandler.js에서 처리
+
