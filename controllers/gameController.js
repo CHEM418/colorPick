@@ -1,8 +1,23 @@
 const asyncHandler = require("express-async-handler");
 const Score = require("../models/scoreModel");
 
+// 각 스테이지 결과 가져오기 stage.ejs
+const getStage = asyncHandler(async(req,res)=>{
+        const currentUser = req.user; //지금 유저 정보
+        let stageTime = []; //각 스테이지 기록 배열 저장
 
-// [각 스테이지가 끝나면 결과 저장]
+        if(currentUser){
+            stageTime = await Score.find({//모든 stage 기록 찾아오기
+                userId: currentUser.id,
+                username: currentUser.username
+            }).sort({stageId:1});
+        }
+        // @@@ ejs에서 stageTime배열 stageId 확인하시고 쓰시면 돼요! @@@
+        res.render('games/stage', {pageName: 'stage',stageTime:stageTime});
+});
+
+
+// 각 스테이지가 끝나면 결과 저장
 const gameStageResult = asyncHandler(async(req, res)=>{
     const{userId,username,time,stageId}=req.body ;
     if(!userId||!username||!time||!stageId){
@@ -16,7 +31,7 @@ const gameStageResult = asyncHandler(async(req, res)=>{
 });
 
 
-// [최고기록 저장]
+//최고기록 저장
 const gameResult = asyncHandler(async(req,res)=>{
     const {userId,username,time} = req.body; //프론트에서 보내준 값
 
@@ -55,5 +70,5 @@ const gameResult = asyncHandler(async(req,res)=>{
     
 });
 
-module.exports={gameResult,gameStageResult};
+module.exports={gameResult,gameStageResult,getStage};
 //오류 => 어싱크 핸들러로 오류 던지고 errorhandler.js에서 처리
