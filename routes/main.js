@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {gameResult,gameStageResult,getStage} = require('./controllers/gameController');
+const {gameResult,gameStageResult,getStage} = require('../controllers/gameController');
 
 
 router.get(['/', '/home', '/index'], (req, res)=> {
