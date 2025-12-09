@@ -7,7 +7,14 @@ router.get(['/', '/home', '/index'], (req, res)=> {
     res.render('index', {pageName: 'index'});
 });
 
+
 router.get(['/games/stage', '/stage'],getStage);
+// @ 확인하시면 지워도 돼요! @
+// stage.ejs에서 각 스테이지별 기록 가져오실 때
+// 예시) const ex = <%- JSON.stringify(stageMap) %>; 불러오고
+// ex[1]하시면 스테이지1 시간 가져와져요!! 
+
+
 
     //**게임 기록 저장 코드 (POST)**//
 
