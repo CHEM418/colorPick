@@ -13,7 +13,7 @@ const ScoreSchema = new mongoose.Schema({
             type: Number,
             required: true,
         },
-    stageId:{ // ***stageId별로 저장, stageId가 0인 time은 최고 기록 저장 공간
+    stageId:{ // ***stageId가 0일 때의 time은 최고 기록이에요!
         type:Number,
     }
 },
