@@ -9,7 +9,7 @@ const getStage = asyncHandler(async(req,res)=>{
         if(currentUser){
             stageTime = await Score.find({//모든 stage 기록 찾아오기
                 userId: currentUser.id,
-                username: currentUser.username
+                username: currentUser.username,
                 stageId:{$ne:0}
             }).sort({stageId:1});
         }
